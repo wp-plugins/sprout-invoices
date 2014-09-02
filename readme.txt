@@ -36,7 +36,8 @@ Estimates are automatically created based on estimate request submissions from y
 Invoices are automatically generated from accepted estimates speeding up the process of getting paid. Sprout Invoices understands deposit payments and doesn't have the same hoops other invoice services require.
 
 
-== Flexibility built in =
+= Flexibility built in =
+
 While Sprout Invoices automates many of the tasks to improve workflow the power comes from customization.
 
 *Custom Estimate and Invoice Templates*
