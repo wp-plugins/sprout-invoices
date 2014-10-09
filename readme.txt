@@ -119,6 +119,8 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 
 == Upgrade Notice ==
 
+= 1.1 =
+
 * _Features:_
 	* Improved Invoice and Estimate templates
 	* Client specific invoice templates
@@ -133,6 +135,7 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 	* Few error prevention updates
 
 == Changelog ==
+
 = 1.1 =
 
 * _Features:_
