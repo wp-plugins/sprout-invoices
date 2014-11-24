@@ -123,19 +123,14 @@ Projects, time tracking and more!
 
 = 2.0 =
 
-== NEW: ==
-
-* Projects
-* Time Tracking (premium license or add-on)
-* WYSIWYG for line items (premium license or add-on)
-
-== Changes: ==
-
-* Improved Client management
-* Easier user assignment and creation for Clients
-* Streamlined Invoice and Estimate edit UI
-* Freshened editing and management all around
-* New possibilities for add-ons
+* NEW: Projects
+* NEW: Time Tracking (premium license or add-on)
+* NEW: WYSIWYG for line items (premium license or add-on)
+* Change: Improved Client management
+* Change: Easier user assignment and creation for Clients
+* Change: Streamlined Invoice and Estimate edit UI
+* Change: Freshened editing and management all around
+* Change: New possibilities for add-ons
 
 = 1.1.5 =
 
