@@ -1,7 +1,7 @@
 === Sprout Invoices - Client Invoicing & Estimates ===
 Contributors: dancameron, sproutapps
 Donate link: https://sproutapps.co/
-Tags: invoicing, estimates, payments, web invoice, bill, paypal, invoice, pay, online payment, send invoice, bill clients, credit cards, stripe, freshbooks, Harvest, wp-invoice
+Tags: invoicing, estimates, payments, web invoice, bill, paypal, invoice, pay, online payment, send invoice, time tracking, invoice billing, bill clients, credit cards, stripe, freshbooks, Harvest, wp-invoice
 Requires at least: 3.8
 Tested up to: 4.0
 Stable tag: 2.0.1
@@ -20,9 +20,7 @@ Our mission at [Sprout Apps](https://sproutapps.co/) is to build a suite of apps
 
 Reduce the time spent fielding project requests, estimating projects & getting paid. Processes are heavily automated and highly customizable to fit your business workflow and brand.
 
-Never worry about how well your business is doing because of some arbitrary limits based on how large your client base is or how many staff members need access.
-
-Make sure to checkout the [Sprout Invoices](https://sproutapps.co/sprout-invoices/) features page for more detailed information. As well as the full featured [demo](https://sproutapps.co/demo/playground).
+Make sure to review the [Sprout Invoices](https://sproutapps.co/sprout-invoices/) features page for more detailed information. As well as the full featured [demo](https://sproutapps.co/demo/playground).
 
 * An awesome [estimate & invoice workflow](https://sproutapps.co/news/what-sprout-invoices-solves-for-freelancers-and-wordpress-sites/). 
 * The best [payment experience](https://sproutapps.co/news/sprout-invoices-payment-options-deposits-checks-authorizations/) for your clients with options for them to pay via Check, PO or [Paypal](https://sproutapps.co/marketplace/paypal-payments-express-checkout/) (additional gateways available).
@@ -53,7 +51,7 @@ The short list...
 * Recurring payments (coming soon)
 * Payment terms (coming soon)
 
-Please note that this feature list is incomplete, since it's long enough.
+Please note that this feature list is incomplete, it's long enough already.
 
 **[Download the most advanced Estimates and Invoicing plugin!](http://downloads.wordpress.org/plugin/sprout-invoices.zip)**
 
@@ -95,7 +93,6 @@ Estimates are automatically created based on estimate request submissions from y
 Invoices are automatically generated from accepted estimates speeding up the process of getting paid. Sprout Invoices understands deposit payments and doesn't have the same hoops other invoice services require.
 
 
-
 == Installation ==
 
 1. Upload plugin folder to the `/wp-content/plugins/` directory
@@ -123,8 +120,25 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 
 * _NEW:_
 	* Projects
-	* Time Tracking (premium version)
-	* WYSIWYG for line items (premium version)
+	* Time Tracking (premium license or add-on)
+	* WYSIWYG for line items (premium license or add-on)
+
+* _Changes:_
+	* Improved Client management
+	* Easier user assignment and creation for Clients
+	* Streamlined Invoice and Estimate edit UI
+	* Freshened editing and management all around
+	* New possibilities for add-ons
+
+
+== Changelog ==
+
+= 2.0 =
+
+* _NEW:_
+	* Projects
+	* Time Tracking (premium license or add-on)
+	* WYSIWYG for line items (premium license or add-on)
 
 * _Changes:_
 	* Improved Client management
@@ -141,7 +155,9 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 * _Bug Fixes:_
 	* ID shortcode fix
 	* js error with custom templates
-	
+
+
+
 = 1.1.4 =
 
 * _Changes:_
@@ -149,8 +165,18 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 	* Better error handling for invoices without clients assigned
 	* Helper functions for future payment processors
 	* More hooks and filters
+	* No index on estimates and invoices!
+	* Paypal line items will not longer use qty since PP prevents fractions (now?)
+	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
+	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
 
 * _Bug Fixes:_
+	* Deposit function adjustments
+	* Paypal balance calculation fix
+	* Paypal qty fraction fix.
+	* Misc. errors and notices
+	* Estimates/Invoices auto-draft bug when doc isn't saved first
+	* Other minor bug fixes
 	* Critical Paypal EC update to capture payment
 
 = 1.1.3 =
@@ -193,39 +219,6 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 * _Bug Fixes:_
 	* Saving error
 	* Line item width after payment
-
-= 1.1 =
-
-* _Features:_
-	* Improved Invoice and Estimate templates
-	* Client specific invoice templates
-	* Client specific estimate templates
-	* Customizable money formats
-	* Improved multi-currency support
-	* Client specific money format
-	* Client specific currency code for payment processing
-	* minor UI improvements
-
-* _Bug Fixes:_
-	* Few error prevention updates
-
-== Changelog ==
-
-= 1.1.4 =
-
-* _Changes:_
-	* No index on estimates and invoices!
-	* Paypal line items will not longer use qty since PP prevents fractions (now?)
-	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
-	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
-
-* _Bug Fixes:_
-	* Deposit function adjustments
-	* Paypal balance calculation fix
-	* Paypal qty fraction fix.
-	* Misc. errors and notices
-	* Estimates/Invoices auto-draft bug when doc isn't saved first
-	* Other minor bug fixes
 
 = 1.1 =
 
