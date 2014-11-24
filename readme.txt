@@ -116,31 +116,19 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 
 == Upgrade Notice ==
 
-= 2.0 =
-
-* _NEW:_
-	* Projects
-	* Time Tracking (premium license or add-on)
-	* WYSIWYG for line items (premium license or add-on)
-
-* _Changes:_
-	* Improved Client management
-	* Easier user assignment and creation for Clients
-	* Streamlined Invoice and Estimate edit UI
-	* Freshened editing and management all around
-	* New possibilities for add-ons
+Projects, time tracking and more!
 
 
 == Changelog ==
 
 = 2.0 =
 
-* _NEW:_
+*_NEW:_*
 	* Projects
 	* Time Tracking (premium license or add-on)
 	* WYSIWYG for line items (premium license or add-on)
 
-* _Changes:_
+*_Changes:_*
 	* Improved Client management
 	* Easier user assignment and creation for Clients
 	* Streamlined Invoice and Estimate edit UI
