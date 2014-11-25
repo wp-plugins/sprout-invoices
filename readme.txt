@@ -4,7 +4,7 @@ Donate link: https://sproutapps.co/
 Tags: invoicing, estimates, payments, web invoice, bill, paypal, invoice, pay, online payment, send invoice, time tracking, invoice billing, bill clients, credit cards, stripe, freshbooks, Harvest, wp-invoice
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 2.0.1
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,8 +118,15 @@ Invoices are automatically generated from accepted estimates speeding up the pro
 
 Projects, time tracking and more!
 
-
 == Changelog ==
+
+= 2.0.5 =
+
+* NEW: Reports dashboard fully responsive
+* Change: Chart js API updated
+* Fix: Dashboard values incorrect under certain circumstances
+* Fix: Chart values are now localized
+* Fix: Other minor fixes
 
 = 2.0 =
 
@@ -134,10 +141,10 @@ Projects, time tracking and more!
 
 = 1.1.5 =
 
-* _Changes:_
+* _Change:_
 	* More hooks and filters
 	* fix for unit tests
-* _Bug Fixes:_
+* _Fix:_
 	* ID shortcode fix
 	* js error with custom templates
 
@@ -145,7 +152,7 @@ Projects, time tracking and more!
 
 = 1.1.4 =
 
-* _Changes:_
+* _Change:_
 	* No page breaks when printing large invoices/estimates
 	* Better error handling for invoices without clients assigned
 	* Helper functions for future payment processors
@@ -155,7 +162,7 @@ Projects, time tracking and more!
 	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
 	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
 
-* _Bug Fixes:_
+* _Fix:_
 	* Deposit function adjustments
 	* Paypal balance calculation fix
 	* Paypal qty fraction fix.
@@ -166,23 +173,23 @@ Projects, time tracking and more!
 
 = 1.1.3 =
 
-* _Changes:_
+* _Change:_
 	* New hooks for estimates and invoice templates
 	* Starting to create some unit tests
 	* Doc changes
 
-* _Bug Fixes:_
+* _Fix:_
 	* Fix qtip
 	* Total calculation issue with template tag
 
 = 1.1.2 =
 
-* _Changes:_
+* _Change:_
 	* No index on estimates and invoices!
 	* Paypal line items will not longer use qty since PP prevents fractions (now?)
 	* Some themes don't register their scripts and styles correctly, so unregistering them comes later on wp_print_scripts
 
-* _Bug Fixes:_
+* _Fix:_
 	* Deposit function adjustments
 	* Paypal balance calculation fix
 	* Paypal qty fraction fix.
@@ -192,7 +199,7 @@ Projects, time tracking and more!
 
 = 1.1.1 =
 
-* _Bug Fixes:_
+* _Fix:_
 	* Estimates slug not created
 	* Clone warning (strict notices)
 	* Other minor bug fixes
@@ -201,7 +208,7 @@ Projects, time tracking and more!
 
 = 1.1.0.1 =
 
-* _Bug Fixes:_
+* _Fix:_
 	* Saving error
 	* Line item width after payment
 
@@ -217,23 +224,23 @@ Projects, time tracking and more!
 	* Client specific currency code for payment processing
 	* minor UI improvements
 
-* _Bug Fixes:_
+* _Fix:_
 	* Few error prevention updates
 
 = 1.0.10.1 =
 
-* _Bug Fixes_
+* _Fix_
 	* Freshbooks payment import fix. FBAPI uses an unconventional amount format (i.e. 353634.980)
 
 = 1.0.10 =
 
-* _Bug Fixes_
+* _Fix_
 	* Client could have non-user_ids associated
 	* Handle text input with bad formatting better
 
 = 1.0.9.1 =
 
-* _Bug Fixes_
+* _Fix_
 	* Deposits bug for free versions
 	* Tasks clarification for free version
 	* Allow for deletion with new drop-down UI
@@ -242,7 +249,7 @@ Projects, time tracking and more!
 
 = 1.0.8 =
 
-* _Bug Fixes_
+* _Fix_
 	* Client creation via AJAX/Modal
 	* Quick send bug fixes for Estimates and Invoices
 	* client_name shortcode
