@@ -827,13 +827,15 @@
 			$(element).keydown(function (e) {
 				var key = e.which || e.keyCode;
 
+				// console.log(key);
+
 				if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
 				// numbers   
 				 key >= 48 && key <= 57 ||
 				// Numeric keypad
 				 key >= 96 && key <= 105 ||
-				// comma, period and minus, . on keypad
-				key == 190 || key == 109 || key == 110 ||
+				// period and minus on keypad
+				key == 190 || key == 109 || key == 110 || key == 190 || key == 189 ||
 				// Backspace and Tab and Enter
 				key == 8 || key == 9 || key == 13 ||
 				// Home and End
