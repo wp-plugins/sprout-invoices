@@ -1,3 +1,8 @@
+= 3.5.1 =
+
+* Fix: Notification type not saving after creation
+* New: Reset Notifications from help menu
+
 = 3.5 =
 
 * Change: Payment notification after admin payment

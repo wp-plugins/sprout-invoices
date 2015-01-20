@@ -148,6 +148,28 @@ class SI_Notifications_Control extends SI_Controller {
 	 */
 	public static function create_notifications() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] == 'sprout-apps/settings' ) {
+
+			// reset
+			if ( isset( $_GET['resetnotifications'] ) && $_GET['resetnotifications'] ) {
+
+				if ( wp_verify_nonce( $_GET['resetnotifications'], 'resetnotifications' ) ) {
+					$args = array(
+						'post_type' => SI_Notification::POST_TYPE,
+						'posts_per_page' => -1,
+						'fields' => 'ids',
+						);
+					$notifications_to_delete = get_posts( $args );
+					if ( !empty( $notifications_to_delete ) ) {
+						foreach ( $notifications_to_delete as $not_to_delete_id ) {
+							// Delete all the existing notifications
+							if ( get_post_type( $not_to_delete_id ) == SI_Notification::POST_TYPE ) {
+								wp_delete_post( $not_to_delete_id, TRUE );
+							}
+						}
+					}
+				}
+			}
+
 			foreach ( self::$notifications as $notification_id => $data ) {
 				$notification = self::get_notification_instance( $notification_id );
 				if ( is_null( $notification ) ) {
@@ -158,7 +180,7 @@ class SI_Notifications_Control extends SI_Controller {
 							'post_content' => $data['default_content']
 						) );
 					$notification = SI_Notification::get_instance( $post_id );
-					self::save_meta_box_notification_submit( $post_id, $notification->get_post(), array(), $post_id );
+					self::save_meta_box_notification_submit( $post_id, $notification->get_post(), array(), $notification_id );
 					if ( isset( $data['default_disabled'] ) && $data['default_disabled'] ) {
 						$notification->set_disabled( 'TRUE' );
 					}
@@ -265,31 +287,33 @@ class SI_Notifications_Control extends SI_Controller {
 	 * @param  string $notification_id 
 	 * @return                      
 	 */
-	public static function save_meta_box_notification_submit( $post_id, $post, $callback_args, $notification_id = NULL ) {
-		if ( isset( $callback_args['notification_type'] ) && isset( $_POST['notification_type'] ) && NULL === $callback_args['notification_type'] ) {
-			$notification_id = $_POST['notification_type'];
+	public static function save_meta_box_notification_submit( $post_id, $post, $callback_args, $notification_type = NULL ) {
+		if ( $notification_type === NULL && isset( $_POST['notification_type'] ) ) {
+			$notification_type = $_POST['notification_type'];
 		}
 
-		if ( is_null( $notification_id ) ) {
+		if ( is_null( $post_id ) ) {
 			if ( isset( $_POST['ID'] ) ) {
-				$notification_id = $_POST['ID'];
+				$post_id = $_POST['ID'];
 			}
 		}
-		if ( get_post_type( $notification_id ) != SI_Notification::POST_TYPE ) {
+		if ( get_post_type( $post_id ) != SI_Notification::POST_TYPE ) {
 			return;
 		}
 
-		$notifications = get_option( self::NOTIFICATIONS_OPTION_NAME, array() );
 		// Remove any existing notification types that point to the post currently being saved
-		$notifications = array_flip( $notifications );
-		unset( $notifications[$post_id] );
-		$notifications = array_flip( $notifications );
+		$notification_set = get_option( self::NOTIFICATIONS_OPTION_NAME, array() );
+		foreach ( $notification_set as $op_type => $note_id ) {
+			if ( $note_id == $post_id ) {
+				unset( $notification_set[$post_id] );
+			}
+		}
 
-		if ( isset( self::$notifications[$notification_id] ) ) {
+		if ( isset( self::$notifications[$notification_type] ) ) {
 
 			// Associate this post with the given notification type
-			$notifications[$notification_id] = $post_id;
-			update_option( self::NOTIFICATIONS_OPTION_NAME, $notifications );
+			$notification_set[$notification_type] = $post_id;
+			update_option( self::NOTIFICATIONS_OPTION_NAME, $notification_set );
 		}
 
 		$notification = SI_Notification::get_instance( $post_id );
@@ -765,6 +789,12 @@ class SI_Notifications_Control extends SI_Controller {
 					'title' => self::__( 'Advanced' ),
 					'content' => sprintf( '<p><b>HTML Emails</b> - Enable HTML notifications within the <a href="%s">General Settings</a> page. Make sure to change use HTML on all notifications.</p>', admin_url('admin.php?page=sprout-apps/settings') ),
 				) );
+
+			$screen->add_help_tab( array(
+						'id' => 'notifications-refresh',
+						'title' => self::__( 'Notifications reset' ),
+						'content' => sprintf( '<p>%s</p><p><span class="reset_wrap clearfix"><a href="%s" class="button casper">%s</a></span></p></p>', si__('Prior to 3.5.1 a bug was introduced that created notifications that were not assigned a type, this led to multiple types of notification issues. If you have more than 11 notifications below we recommend saving any notifications customizations you might have made and using the reset button.'), add_query_arg( array( 'resetnotifications' => wp_create_nonce( 'resetnotifications' ) ) ), si__('Reset') )
+					) );
 
 			$screen->set_help_sidebar(
 				sprintf( '<p><strong>%s</strong></p>', self::__('For more information:') ) .
