@@ -1,7 +1,9 @@
-= 3.5.1 =
+= 4.0 =
 
-* Fix: Notification type not saving after creation
-* New: Reset Notifications from help menu
+* NEW: Client Dashboards
+* NEW: HTML notification add-on support
+* NEW: Time importing from Freshbooks
+* Misc. bug fixes and updates
 
 = 3.5 =
 
