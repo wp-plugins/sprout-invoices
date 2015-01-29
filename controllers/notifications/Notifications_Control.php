@@ -53,6 +53,12 @@ class SI_Notifications_Control extends SI_Controller {
 		// Help Sections
 		add_action( 'admin_menu', array( get_class(), 'help_sections' ) );
 
+
+		if ( is_admin() ) {
+			add_action( 'init', array( get_class(), 'maybe_refresh_notifications' ) );
+		}
+
+
 	}
 
 	////////////
@@ -231,7 +237,6 @@ class SI_Notifications_Control extends SI_Controller {
 	 * @return                
 	 */
 	public static function show_shortcode_meta_box( $post, $metabox ) {
-		$notification = SI_Notification::get_instance( $post->ID );
 		$id = preg_replace( '/^' . preg_quote( self::META_BOX_PREFIX ) . '/', '', $metabox['id'] );
 		if ( isset( self::$notifications[$id] ) ) {
 			self::load_view( 'admin/meta-boxes/notifications/shortcodes', array(
@@ -359,14 +364,11 @@ class SI_Notifications_Control extends SI_Controller {
 			$notification_post = $notification->get_post();
 			$title = $notification_post->post_title;
 			$title = self::do_shortcodes( $notification_name, $title );
-			return apply_filters( 'si_get_notification_instance_subject', $title, $notification_name, $data );
 		} elseif ( isset( self::$notifications[$notification_name] ) && isset( self::$notifications[$notification_name]['default_title'] ) ) {
 			$title = self::$notifications[$notification_name]['default_title'];
 			$title = self::do_shortcodes( $notification_name, $title );
-			return apply_filters( 'si_get_notification_instance_subject', $title, $notification_name, $data );
 		}
-
-		return apply_filters( 'si_get_notification_instance_subject', '', $notification_name, $data );
+		return apply_filters( 'si_get_notification_instance_subject', $title, $notification_name, $data );
 	}
 
 	/**
@@ -383,13 +385,11 @@ class SI_Notifications_Control extends SI_Controller {
 			$notification_post = $notification->get_post();
 			$content = $notification_post->post_content;
 			$content = self::do_shortcodes( $notification_name, $content );
-			return apply_filters( 'si_get_notification_instance_content', $content, $notification_name, $data );
 		} elseif ( isset( self::$notifications[$notification_name] ) && isset( self::$notifications[$notification_name]['default_content'] ) ) {
 			$content = self::$notifications[$notification_name]['default_content'];
 			$content = self::do_shortcodes( $notification_name, $content );
-			return apply_filters( 'si_get_notification_instance_content', $content, $notification_name, $data );
 		}
-		return apply_filters( 'si_get_notification_instance_content', '', $notification_name, $data );
+		return apply_filters( 'si_get_notification_instance_content', $content, $notification_name, $data );
 	}
 
 	/**
@@ -403,9 +403,6 @@ class SI_Notifications_Control extends SI_Controller {
 	 * @return 
 	 */
 	public static function send_notification( $notification_name, $data = array(), $to, $from_email = null, $from_name = null, $html = null ) {
-		// The options registered in the notification type array
-		$registered_notification = self::$notifications[$notification_name];
-
 		// don't send disabled notifications
 		if ( apply_filters( 'suppress_notifications', FALSE ) || self::is_disabled( $notification_name ) ) {
 			return;
@@ -586,7 +583,7 @@ class SI_Notifications_Control extends SI_Controller {
 		// then try to determine based on email address
 		if ( !$user_id ) {
 			$email = ( isset( $data['user_email'] ) && $data['user_email'] != '' ) ? $data['user_email'] : $to ;
-			$user = get_user_by( 'email', $to );
+			$user = get_user_by( 'email', $email );
 			if ( $user && isset( $user->ID ) ) {
 				$user_id = $user->ID;
 			}
@@ -768,11 +765,46 @@ class SI_Notifications_Control extends SI_Controller {
 					'content' => sprintf( '<p><b>HTML Emails</b> - Enable HTML notifications within the <a href="%s">General Settings</a> page. Make sure to change use HTML on all notifications.</p>', admin_url('admin.php?page=sprout-apps/settings') ),
 				) );
 
+			
+			$screen->add_help_tab( array(
+					'id' => 'notification-refresh',
+					'title' => self::__( 'Notifications Cleanup' ),
+					'content' => sprintf( '<p>%s</p><p><span class="cache_button_wrap casper clearfix"><a href="%s">%s</a></span></p></p>', si__('In an earlier version of Sprout Invoices numerous notifications were improperly created. Click refresh below to delete all extraneous notifications. Backup any modifications that you might have made to your notifications before continuing.'), add_query_arg( array( 'refresh-notifications' => 1 ) ), si__('Clean') )
+				) );
+
 			$screen->set_help_sidebar(
 				sprintf( '<p><strong>%s</strong></p>', self::__('For more information:') ) .
 				sprintf( '<p><a href="%s" class="button">%s</a></p>', 'https://sproutapps.co/support/knowledgebase/sprout-invoices/notifications/', self::__('Documentation') ) .
 				sprintf( '<p><a href="%s" class="button">%s</a></p>', 'https://sproutapps.co/support/', self::__('Support') )
 			);
+		}
+	}
+
+	///////////
+	// Misc //
+	///////////
+
+	public static function maybe_refresh_notifications() {
+		if ( !is_admin() ) {
+			return;
+		}
+		if ( !current_user_can('delete_posts') ) {
+			return;
+		}
+		if ( isset( $_GET['refresh-notifications'] ) && $_GET['refresh-notifications'] ) { // If dev than don't cache.
+			$active_notifications = get_option( self::NOTIFICATIONS_OPTION_NAME );
+
+			$args = array(
+				'post_type' => SI_Notification::POST_TYPE,
+				'posts_per_page' => -1,
+				'exclude' => array_values($active_notifications),
+				'fields' => 'ids'
+			);
+			$posts = get_posts( $args );
+
+			foreach ( $posts as $post_id ) {
+				wp_delete_post( $post_id, TRUE );
+			}
 		}
 	}
 
