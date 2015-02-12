@@ -576,6 +576,7 @@ abstract class SI_Controller extends Sprout_Invoices {
 	);
 
 	protected static $locales = array( 
+		'Default' => '',
 		'Albanian (Albania)' => 'sq_AL',
 		'Albanian' => 'sq',
 		'Arabic (Algeria)' => 'ar_DZ',
@@ -752,8 +753,7 @@ abstract class SI_Controller extends Sprout_Invoices {
 
 		// Messages
 		add_action( 'init', array( __CLASS__, 'load_messages' ), 0, 0 );
-		add_action( 'loop_start', array( __CLASS__, 'do_loop_start' ), 10, 1 );
-
+		
 		// AJAX
 		add_action( 'wp_ajax_si_display_messages', array( __CLASS__, 'display_messages' ) );
 		add_action( 'wp_ajax_nopriv_si_display_messages', array( __CLASS__, 'display_messages' ) );
@@ -1200,13 +1200,6 @@ abstract class SI_Controller extends Sprout_Invoices {
 		}
 	}
 
-	public static function do_loop_start( $query ) {
-		global $wp_query;
-		if ( $query == $wp_query ) {
-			self::display_messages();
-		}
-	}
-
 	public static function login_required( $redirect = '' ) {
 		if ( !get_current_user_id() && apply_filters( 'si_login_required', TRUE ) ) {
 			if ( !$redirect && self::using_permalinks() ) {
@@ -1516,28 +1509,44 @@ abstract class SI_Controller extends Sprout_Invoices {
 		if ( !isset( $_REQUEST['change_status_nonce'] ) )
 			self::ajax_fail( 'Forget something?' );
 
-		$nonce = $_REQUEST['change_status_nonce'];
+		$nonce = esc_attr( $_REQUEST['change_status_nonce'] );
 		if ( !wp_verify_nonce( $nonce, self::NONCE ) )
 			self::ajax_fail( 'Not going to fall for it!' );
 
 		if ( !isset( $_REQUEST['id'] ) )
 			self::ajax_fail( 'Forget something?' );
 
+		if ( !isset( $_REQUEST['status'] ) )
+			self::ajax_fail( 'Forget something?' );
+
 		$view = '';
-		switch ( get_post_type( $_REQUEST['id'] ) ) {
+		$doc_id = esc_attr( $_REQUEST['id'] );
+		$new_status = esc_attr( $_REQUEST['status'] );
+		switch ( get_post_type( $doc_id ) ) {
 			case SI_Invoice::POST_TYPE:
-				$doc = SI_Invoice::get_instance( $_REQUEST['id'] );
-				$doc->set_status( $_REQUEST['status'] );
+				$doc = SI_Invoice::get_instance( $doc_id );
+				$doc->set_status( $new_status );
 				$view = self::load_view_to_string( 'admin/sections/invoice-status-change-drop', array(
-						'id' => $_REQUEST['id'],
+						'id' => $doc_id,
 						'status' => $doc->get_status()
 					), FALSE );
 				break;
 			case SI_Estimate::POST_TYPE:
-				$doc = SI_Estimate::get_instance( $_REQUEST['id'] );
-				$doc->set_status( $_REQUEST['status'] );
+				switch ( $new_status ) {
+					case 'accept':
+						$new_status = SI_Estimate::STATUS_APPROVED;
+						break;
+					case 'decline':
+						$new_status = SI_Estimate::STATUS_DECLINED;
+						break;
+					
+					default:
+						break;
+				}
+				$doc = SI_Estimate::get_instance( $doc_id );
+				$doc->set_status( $new_status );
 				$view = self::load_view_to_string( 'admin/sections/estimate-status-change-drop', array(
-						'id' => $_REQUEST['id'],
+						'id' => $doc_id,
 						'status' => $doc->get_status()
 					), FALSE );
 				break;
